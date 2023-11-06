@@ -15,12 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $newFileName = md5(time() . $fileName) . "." . $fileExtention;
             $allowedFileExtentions = ["jpg", "jpeg", "png"];
             if (in_array($fileExtention, $allowedFileExtentions)) {
-                $uploadFileDir = "../upload/";
-                $destPath = $uploadFileDir . $newFileName;
-                if (move_uploaded_file($filePath, $destPath)) {
-                    $msg = "Your file has been successfully uploaded.";
+                $allowedFileSize = 6 * 1024 * 1024;
+                if ($fileSize < $allowedFileSize) {
+                    $uploadFileDir = "../upload/";
+                    $destPath = $uploadFileDir . $newFileName;
+                    if (move_uploaded_file($filePath, $destPath)) {
+                        $msg = "Your file has been successfully uploaded.";
+                    } else {
+                        $msg = "Error uploading the file!";
+                    }
                 } else {
-                    $msg = "Error uploading the file!";
+                    $msg = "The file you want exceeds the limit!";
                 }
             } else {
                 $msg = "The file you want to upload is not allowed!";
